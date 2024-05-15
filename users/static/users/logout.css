@@ -6,8 +6,8 @@ body {
 }
 
 div {
-    margin: 20px;
-    padding: 20px;
+    margin: 150px;
+    padding: 150px;
     width : 40%;
     background-color: #fff;
     border-radius: 5px;
@@ -29,7 +29,7 @@ a:hover {
 
 .border-top {
     border-top: 1px solid #ccc;
-    padding-top: 10px;
+    padding-top: 20px;
 }
 
 .text-muted {
@@ -43,3 +43,23 @@ a:hover {
 .text-muted a:hover {
     color: #0056b3;
 }
+
+/* logout.css */
+/* html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    text-align: center;
+}
+
+.content {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+} */

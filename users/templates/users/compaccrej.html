@@ -31,18 +31,19 @@
                 <td>{{ student.cgpa }}</td>
                 <td><a href="{{ MEDIA_URL }}{{ student.cv.url }}" target="_blank">View CV</a></td>
                 <td>
-                    <form action="accept_application/" method="POST">
+                    <form action="accept_application/" method="POST" class="accept-form">
                         {% csrf_token %}
-                        <button type="submit">Accept</button>
+                        <button type="submit" class="accept-btn">Accept</button>
                     </form>
-                    <form action="{% url 'reject_application' %}" method="POST">
+                    <form action="{% url 'reject_application' %}" method="POST" class="reject-form">
                         {% csrf_token %}
-                        <button type="submit">Reject</button>
+                        <button type="submit" class="reject-btn">Reject</button>
                     </form>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    <script src="{% static 'users/compaccrej.js' %}"></script>
 </body>
 </html>

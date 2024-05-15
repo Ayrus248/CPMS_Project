@@ -46,17 +46,16 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button.accept {
-    background-color: #008000; /* Green color for the Accept button */
-    color: #ffffff;
+/* compaccrej.css */
+.accept-btn, .reject-btn {
+    cursor: pointer;
+    padding: 5px 10px;
 }
 
-button.reject {
-    background-color: #ff0000; /* Red color for the Reject button */
-    color: #ffffff;
+.accepted {
+    color: green;
 }
 
-button:hover {
-    background-color: #555;
+.rejected {
+    color: red;
 }
-

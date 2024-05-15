@@ -34,16 +34,16 @@ class UploadCV(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class ApplyJobView(APIView):
-    def post(self, request):
-        selected_job_ids = request.data.get('job_id', []) 
-        student_id = request.user.username  
-
+    def post(self, request): 
+        selected_job_ids = request.POST.getlist('job_ids[]')
+        print(selected_job_ids)
+        student_id = request.user.username
         applied_candidates_list = []
         for job_id in selected_job_ids:
             applied_candidate_data = {'student_id': student_id, 'job_id': job_id}
             applied_candidates_list.append(applied_candidate_data)
-
         serializer = CandidateSerializers(data=applied_candidates_list, many=True)
+        print(applied_candidates_list)
         if serializer.is_valid():
             serializer.save()
             return redirect('stud_dashboard')
@@ -116,7 +116,6 @@ def stud_apply_job(request):
         username = request.user.username
         student = Student.objects.get(student_id=username)
         notifications = Notification.objects.filter(student_id=student.student_id)
-        
         job_postings = JobPosting.objects.all()
         job_postings_with_company_name = []
         for job in job_postings:
@@ -269,5 +268,5 @@ class AcceptApplicationView(APIView):
             return Response({'error': 'Invalid request method.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
 def reject_application(request):
-    Notification.objects.create(student=AppliedCandidates.student_id, message='Your application has been rejected.')
+    Notification.objects.create(student_id=AppliedCandidates.student_id, message='Your application has been rejected.')
     return redirect('stud_applications')
