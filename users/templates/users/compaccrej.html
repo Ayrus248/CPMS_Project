@@ -35,7 +35,7 @@
                         {% csrf_token %}
                         <button type="submit" class="accept-btn">Accept</button>
                     </form>
-                    <form action="{% url 'reject_application' %}" method="POST" class="reject-form">
+                    <form action="reject_application/" method="POST" class="reject-form">
                         {% csrf_token %}
                         <button type="submit" class="reject-btn">Reject</button>
                     </form>
@@ -44,6 +44,6 @@
             {% endfor %}
         </tbody>
     </table>
-    <script src="{% static 'users/compaccrej.js' %}"></script>
+    {% comment %} <script src="{% static 'users/compaccrej.js' %}"></script> {% endcomment %}
 </body>
 </html>

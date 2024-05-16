@@ -36,14 +36,12 @@ class UploadCV(APIView):
 class ApplyJobView(APIView):
     def post(self, request): 
         selected_job_ids = request.POST.getlist('job_ids[]')
-        print(selected_job_ids)
         student_id = request.user.username
         applied_candidates_list = []
         for job_id in selected_job_ids:
             applied_candidate_data = {'student_id': student_id, 'job_id': job_id}
             applied_candidates_list.append(applied_candidate_data)
         serializer = CandidateSerializers(data=applied_candidates_list, many=True)
-        print(applied_candidates_list)
         if serializer.is_valid():
             serializer.save()
             return redirect('stud_dashboard')
@@ -249,10 +247,48 @@ class AcceptApplicationView(APIView):
                 try:
                     applied_candidate = AppliedCandidates.objects.get(student_id=student_id, job_id__in=job_postings)
                     applied_candidate.accepted = True
+
+                    # Update accepted value using serializer
+                    serializer = CandidateSerializers(applied_candidate, data={'accepted': True}, partial=True)
+                    if serializer.is_valid():
+                        serializer.save()
+
+                        # Create notification
+                        notification_data = {
+                            'student_id': applied_candidate.student_id,
+                            'message': 'Your application has been accepted.'
+                        }
+                        notification_serializer = NotificationSerializers(data=notification_data)
+                        if notification_serializer.is_valid():
+                            notification_serializer.save()
+                        else:
+                            return Response(notification_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+                except AppliedCandidates.DoesNotExist:
+                    return Response({'error': 'Application does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+            # return Response({'success': 'Applications accepted successfully.'}, status=status.HTTP_200_OK)
+            return redirect('stud_applications')
+        else:
+            return Response({'error': 'Invalid request method.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class RejectApplicationView(APIView):
+    def post(self, request):
+        if request.method == 'POST':
+            username = request.user.username
+            job_postings = JobPosting.objects.filter(company_id=username)
+            applied_candidates = AppliedCandidates.objects.filter(job_id__in=job_postings)
+            student_ids = [candidate.student_id for candidate in applied_candidates]
+            
+            for student_id in student_ids:
+                try:
+                    applied_candidate = AppliedCandidates.objects.get(student_id=student_id, job_id__in=job_postings)
+                    applied_candidate.accepted = False  # Set accepted value to False
                     applied_candidate.save()
                     notification_data = {
                         'student_id': applied_candidate.student_id,
-                        'message': 'Your application has been accepted.'
+                        'message': 'Your application has been rejected.'  # Update notification message accordingly
                     }
                     serializer = NotificationSerializers(data=notification_data)
                     if serializer.is_valid():
@@ -266,7 +302,3 @@ class AcceptApplicationView(APIView):
             return redirect('stud_applications')
         else:
             return Response({'error': 'Invalid request method.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-    
-def reject_application(request):
-    Notification.objects.create(student_id=AppliedCandidates.student_id, message='Your application has been rejected.')
-    return redirect('stud_applications')

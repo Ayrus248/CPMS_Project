@@ -42,7 +42,7 @@ urlpatterns = [
     path('cdashboard/posted_jobs', user_views.posted_jobs, name='posted_jobs'),
     path('cdashboard/stud_applications', user_views.stud_applications, name='stud_applications'),
     path('cdashboard/accept_application/', user_views.AcceptApplicationView.as_view()),
-    path('cdashboard/stud_applications/reject_application', user_views.reject_application, name='reject_application'),
+    path('cdashboard/reject_application/', user_views.RejectApplicationView.as_view()),
     path('delete_job/<int:job_id>/', user_views.delete_job_posting, name='delete_job_posting'),
 
 

@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import Department, Student, Company, AppliedCandidates, JobPosting
+from .models import Department, Student, Company, AppliedCandidates, JobPosting, Notification
 from import_export.admin import ExportMixin
 from import_export import resources
 
@@ -46,3 +46,4 @@ admin.site.register(JobPosting, JobPostingAdmin)
 admin.site.register(AppliedCandidates, AppliedCandidatesAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(Student, StudentAdmin)
+# admin.site.register(Notification)
