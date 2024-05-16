@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'admin_interface',
     'colorfield',
     'django_light',
-    'admin_tools_stats',  # this must be BEFORE 'admin_tools' and 'django.contrib.admin'
     'django_nvd3',
     'django.contrib.admin',
     'django.contrib.auth',
